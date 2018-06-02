@@ -1,6 +1,5 @@
 import numpy as np
 
-
 bill_number = 0
 serial_number = 0
 item_name = "name"
@@ -40,6 +39,7 @@ quantity = []
 price = []
 
 #print(rupee_mapping_dic["रुपय"])
+
 
 for each_item in user_shoping_list:
     for number_mapping in quantity_no_mapping_dic:
