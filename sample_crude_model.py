@@ -1,5 +1,7 @@
 import numpy as np
 import datetime
+import voice_input as vi
+
 
 #commands = ["दो बॉटल हार्पिक लेवेंडर","दस रुपये की साबुत लाल मिर्च"]
 #commands = ["ढाई सौ ग्राम सूजी", "चार के जी आटा सत्ताईस रुपये केजी वाला"]
@@ -199,7 +201,7 @@ def print_invoice(entity_name, quantity, price, np_cost, final_total):
 
 
     for serial_number in range(len(entity_name)):
-        print(str(counter) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) + str(price[counter]) )
+        print(str(counter + 1) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) + str(price[counter]) )
         counter = counter + 1
 
 
@@ -207,6 +209,8 @@ def print_invoice(entity_name, quantity, price, np_cost, final_total):
     print("================================================================")
 
 def main():
+
+    commands = vi.get_voice_input()
     quantity, price, entity_name = assign_quantaties(commands,quantity_no_mapping_dic)
     final_total, np_cost  = compute_final_price(entity_name, quantity, price)
     print_invoice(entity_name, quantity, price, np_cost, final_total)
@@ -214,3 +218,6 @@ def main():
 
 
 main()
+
+
+
