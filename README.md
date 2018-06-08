@@ -7,8 +7,8 @@ pip3 install numpy
 ```
 
 #### 1.2. Format Support 
-##### 1. Standard dot matrix printable
- - This format is traditionally used in Indian shops. 
+##### 1. Standard Dot Matrix
+ - A custom printable format traditionally used in Indian shops. 
  
 <!---
 <img width="566" alt="commands" src="https://user-images.githubusercontent.com/1677487/41131592-0bdb9ca2-6ada-11e8-93f7-f707cdd49c90.png">
