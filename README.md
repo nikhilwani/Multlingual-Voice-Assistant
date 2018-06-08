@@ -1,9 +1,12 @@
 # Multlingual-Voice-Assistant-System
 
-
-Requirements
+#### 1.1. Required modules. (requirement.txt)
+```
 pip3 install texttable
+```
+```
 pip3 install numpy
+```
 
 It also includes the standard dot matrix printable format used in Indian shops. 
 
