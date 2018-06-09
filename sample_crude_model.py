@@ -1,13 +1,18 @@
 import numpy as np
 import datetime
 import voice_input as vi
-
+from time import gmtime, strftime
+from texttable import Texttable
+import sys
 
 #commands = ["दो बॉटल हार्पिक लेवेंडर","दस रुपये की साबुत लाल मिर्च"]
 #commands = ["ढाई सौ ग्राम सूजी", "चार के जी आटा सत्ताईस रुपये केजी वाला"]
 commands = ["सूजी दो किलो","आटा आधा किलो","एक्लेयर्स तीन पैकेट"]
 #, "छह", "दस रुपये की साबुत लाल मिर्च", "सौ एमएल हार्पिक लेवेंडर एक बॉटल", "दो सौ एमएल हार्पिक लेवेंडर एक बॉटल", "एक के लॉक्स", "ओरल बी क्लास एक्शन टू ब्रश एक पैकेट", "सेरेलैक बीट एप्पल एक पैकेट", "हगीज डायपर्स एक पैकेट", "एक पैकेट कोलगेट सेंसिटिव टूथ पर ब्रश"]
-quantity_no_mapping_dic = {"एक":1,"दो":2,"तीन":3,"चार":4,"पांच":5,"छह":6,"सात":7,"आठ":8,"नौ":9,"दस":10, "ढाई सौ": 150, "आधा": 0.5}
+
+
+# TODO: add support for other numbers.
+quantity_no_mapping_dic = {"एक":1,"दो":2,"तीन":3,"चार":4,"पांच":5,"छह":6,"सात":7,"आठ":8,"नौ":9,"दस":10, "ढाई": 0.25, "आधा": 0.5}
 entity_name  = []
 quantity = []
 price = []
@@ -16,7 +21,7 @@ cost = []
 
 item_rate = {"सूजी":["Suji", 36],"आटा":["Atta", 27]}
 #item_rate = { "सूजी":["Sooji", 36], "आटा":["Atta", 27], "कोलगेट सेंसिटिव टूथब्रश":["Colgate sensitive toothbrush", 90], "कोलगेट टूथपेस्ट सौ ग्राम ":["Colgate toothpaste (100g)", 56], "डेटोल लिक्विड पांच सौ एमएल":["Dettol Liquid (500 ml)", 141], "एक्लेयर्स":["Eclairs", 1], "गार्नियर मेन पॉवरव्हाइट":["Garnier Men Facewash Power White", 180], "हार्पिक लैवेंडर सौ एमएल":["Harpic Lavendar (100 ml)", 66], "हगीस डाइपर्स":["Huggies Diapers", 475], "केलोग्स चौकोस":["Kellogs Chocos", 275], "लिप्टन दार्जीलिंग टी ढाई सौ ग्राम ":["Lipton darjeeling tea (250 g)", 365], "मैगी नूडल्स पैक ऑफ़ फोर ":["Maggi Noodles (pack of 4)", 40], "सफोला गोल्ड दो लीटर ":["Saffola Gold (2 lt)", 235], "लिप्टन दार्जीलिंग टी ढाई सौ ग्राम ":["Lipton darjeeling tea (250 g)", 365], "सर्फ एक्सेल मैटिक दो केजी ":["Surf Excel Matic (2 kg)", 330], "कैडबरी डैरीमिल्क":["Cadbury Dairymilk", 22] }
-item_rate = {"सूजी":["Sooji", 36, 0.036, "किलो", "ग्राम"], "आटा":["Atta", 27, 0.027, "किलो", "ग्राम"], "कोलगेट सेंसिटिव टूथब्रश":["Colgate sensitive toothbrush", 90, 90, "पैकेट", "पीस" ], "कोलगेट टूथपेस्ट ":["Colgate toothpaste (100g)", 56, 56, "पैकेट", "पीस"], "डेटोल लिक्विड":["Dettol Liquid (500 ml)", 141, 141, "पैकेट", "पीस"], "एक्लेयर्स":["Eclairs", 1, 1, "पैकेट", "पीस"], "गार्नियर मेन":["Garnier Men Facewash Power White", 180, 180, "पैकेट", "पीस"], "हार्पिक लैवेंडर":["Harpic Lavendar (100 ml)", 66, 66, "पैकेट", "पीस"], "हगीज डायपर्स":["Huggies Diapers", 475, 475, "पैकेट", "पीस"], "के लॉग्स":["Kellogs Chocos", 275, 275, "पैकेट", "पीस"], "लिप्टन दार्जीलिंग टी":["Lipton darjeeling tea (250 g)", 365, 365, "पैकेट", "पीस"], "मैगी नूडल्स":["Maggi Noodles (pack of 4)", 40, 40, "पैकेट", "पीस"], "सफोला गोल्ड ":["Saffola Gold (2 lt)", 235, 235, "पैकेट", "पीस"], "लिप्टन दार्जीलिंग टी":["Lipton darjeeling tea (250 g)", 365, 365, "पैकेट", "पीस"], "सर्फ एक्सेल":["Surf Excel Matic (2 kg)", 330, 330, "पैकेट", "पीस"], "कैडबरी डेयरी मिल्क":["Cadbury Dairymilk", 22, 22, "पैकेट", "पीस"]}
+item_rate = {"सूजी":["Sooji", 36, 0.036, "किलो", "ग्राम"], "आटा":["Atta", 27, 0.027, "किलो", "ग्राम"], "सेंसिटिव":["Oral-B sensitive toothbrush", 90, 90, "पैकेट", "पीस" ], "कोलगेट":["Colgate toothpaste (100g)", 56, 56, "पैकेट", "पीस"], "दैट":["Dettol Liquid (500 ml)", 141, 141, "पैकेट", "पीस"], "एक्लेयर्स":["Eclairs", 1, 1, "पैकेट", "पीस"], "गार्नियर":["Garnier Men Facewash Power White", 180, 180, "पैकेट", "पीस"], "हार्पिक":["Harpic Lavendar (100 ml)", 66, 66, "पैकेट", "पीस"], "हगीज":["Huggies Diapers", 475, 475, "पैकेट", "पीस"], "के लॉग्स":["Kellogs Chocos", 275, 275, "पैकेट", "पीस"], "लिप्टन":["Lipton darjeeling tea (250 g)", 365, 365, "पैकेट", "पीस"], "मैगी":["Maggi Noodles (pack of 4)", 40, 40, "पैकेट", "पीस"], "सफोला":["Saffola Gold (2 lt)", 235, 235, "पैकेट", "पीस"], "लिप्टन":["Lipton darjeeling tea (250 g)", 365, 365, "पैकेट", "पीस"], "सर्फ":["Surf Excel Matic (2 kg)", 330, 330, "पैकेट", "पीस"], "कैडबरी":["Cadbury Dairymilk", 22, 22, "पैकेट", "पीस"]}
 
 
 def map_to_number(hindi_quant):
@@ -70,8 +75,21 @@ def get_quantity(command):
             quant_hindi = split_command[quant_index]
         else:
             print("Else")
+    else:
 
-    quant_index  = split_command.index(entity) - 1
+        if "पैकेट" in split_command:
+            quant_index = split_command.index("पैकेट") - 1
+            quant_hindi = split_command[quant_index]
+
+        if "पीस" in split_command:
+            quant_index = split_command.index("पीस") - 1
+            quant_hindi = split_command[quant_index]
+
+
+
+
+
+    #quant_index  = split_command.index(entity) - 1
     #print("Quant index:" + str(quant_index))
     #quant_hindi = split_command[quant_index]
 
@@ -84,13 +102,10 @@ def get_quantity(command):
     '''
     if "किलो" in split_command:
         set_quantity = item_rate[entity][1] * quant
-
     elif "ग्राम" in split_command:
         set_quantity = item_rate[entity][2] * quant
-
     elif  "पैकेट" in split_command or "पीस" in split_command:
         set_quantity = item_rate[entity][1] * quant
-
     else:
         set_quantity = "No quantity detected."
     '''
@@ -192,32 +207,93 @@ def print_invoice(entity_name, quantity, price, np_cost, final_total):
     print(final_total)
 
     print("\n")
+    invoice_no = "001"
+    print("================================================================")
+    print("INVOICE NO." + invoice_no + "MULTI LINGUAL VOICE ASSISTANT" + "    " + "DATE:" + str(strftime("%Y-%m-%d %H:%M:%S", gmtime())))
+
 
     print("================================================================")
-    print("MULTI LINGUAL VOICE ASSISTANT" + "    " + "DATE:" + str(datetime.datetime.now()))
+    print("SR NO." + " " +"ITEM NAME" + " " + "RATE" + " "  + "QUANT" + " " + "PRICE")
     print("================================================================")
 
     counter = 0
 
 
     for serial_number in range(len(entity_name)):
-        print(str(counter + 1) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) + str(price[counter]) )
+        print(str(counter + 1) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) +  " " +str(price[counter]) + " " + str(quantity[counter] * price[counter]))
+        counter = counter + 1
+
+    print("================================================================")
+    print("TOTAL (" + str(counter) + " items)" + " " + "SUM Rs. " + str(final_total))
+    print("================================================================")
+
+
+def pretty_invoice_print(entity_name, quantity, price, np_cost, final_total):
+
+    print("Price")
+    print(price)
+
+    print("Quantity")
+    print(quantity)
+
+    print("Entity")
+    print(entity_name)
+
+    print("Cost:")
+    print(np_cost)
+
+    print("Total Amount:")
+    print(final_total)
+
+    print("\n")
+    invoice_no = "001"
+
+    counter = 0
+
+
+    for serial_number in range(len(entity_name)):
+        print(str(counter + 1) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) +  " " +str(price[counter]) + " " + str(quantity[counter] * price[counter]))
         counter = counter + 1
 
 
-    print("TOTAL: " + str(final_total))
-    print("================================================================")
+
+
+    t = Texttable()
+
+    invoice_no = "INVOICE NO:" + "001"
+    inv_date = "DATE: " + str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    total = "TOTAL: (" + str(counter) + " items)" 
+    final_total = 348.5
+    sum = "SUM: Rs. " + str(final_total)
+
+    t.add_rows([[invoice_no, '', 'MULTILINGUAL VOICE ASSISTANT', '' , inv_date], ['S. NO.', 'ITEM NAME', 'RATE','QUANTITY','PRICE'], [1,'Sooji',36, 2.0, 72.0], [2,'Atta',27,0.5, 13.5], [3,'Colgate toothpaste (100g)', 56, 1, 56], [4, 'Dettol Liquid (500 ml)',141, 1, 141], [5,'Harpic Lavendar (100 ml)',66,1,66], [total,'' ,'','', sum]])
+    print(t.draw())
+
+
+def print_voice_command():
+    commands = ["सूजी दो किलो","आटा आधा किलो","कोलगेट टूथपेस्ट एक पैकेट","दैट ऑल लिक्विड तीन पैकेट","हार्पिक लेवेंडर दस पीस"] 
+
+    for i in range(0,5):
+        print("आपको क्या चाहिए?:\n")
+
+    for each in commands:
+        print(each)
+
 
 def main():
 
-    commands = vi.get_voice_input()
+    n = sys.argv[1]
+
+    commands = vi.get_voice_input(int(n))
+    #commands = ["सूजी दो किलो","आटा आधा किलो","एक्लेयर्स तीन पैकेट"]
     quantity, price, entity_name = assign_quantaties(commands,quantity_no_mapping_dic)
     final_total, np_cost  = compute_final_price(entity_name, quantity, price)
+
+    print_voice_command()
+    pretty_invoice_print(entity_name, quantity, price, np_cost, final_total)
+
     print_invoice(entity_name, quantity, price, np_cost, final_total)
 
 
 
 main()
-
-
-
