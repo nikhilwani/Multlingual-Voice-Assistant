@@ -11,6 +11,7 @@ pip3 install numpy
 
 ```
 <trigger-word> <adjunct-words> <quantity-word> <quantity-type-word>
+Example: आटा आधा किलो
 ```
 
 #### 1.2. Format Support 
