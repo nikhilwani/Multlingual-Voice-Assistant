@@ -6,6 +6,13 @@ pip3 install texttable
 pip3 install numpy
 ```
 
+#### 1.2 Voice Activation Commands
+- Hindi
+
+```
+<trigger-word> <adjunct-words> <quantity-word> <quantity-type-word>
+```
+
 #### 1.2. Format Support 
 ##### 1. Standard Dot Matrix
  - A custom printable format traditionally used in Indian shops. 
