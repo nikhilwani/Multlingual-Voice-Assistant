@@ -3,14 +3,14 @@ import requests
 import json
 
 
-NO_OF_ITEMS = 2
 mic_name = "Built-in Microphone"
 sample_rate = 48000
 chunk_size = 2048
 
 
-def get_voice_input():
+def get_voice_input(n):
 
+    NO_OF_ITEMS = n
     r = sr.Recognizer()
      
     #generate a list of all audio cards/microphones
@@ -61,6 +61,3 @@ def get_voice_input():
     print(user_shoping_list)
 
     return user_shoping_list
-
-
-
