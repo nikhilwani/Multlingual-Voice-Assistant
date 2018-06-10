@@ -228,7 +228,7 @@ def print_invoice(entity_name, quantity, price, np_cost, final_total):
     print("================================================================")
 
 
-def pretty_invoice_print(entity_name, quantity, price, np_cost, final_total):
+def dummy_pretty_invoice_print(entity_name, quantity, price, np_cost, final_total):
 
     print("Price")
     print(price)
@@ -270,6 +270,39 @@ def pretty_invoice_print(entity_name, quantity, price, np_cost, final_total):
     print(t.draw())
 
 
+def pretty_invoice_print(entity_name, quantity, price, np_cost, final_total):
+
+    invoice_no = "001"
+    counter = 0
+
+    t = Texttable()
+
+    invoice_no = "INVOICE NO:" + "001"
+    inv_date = "DATE: " + str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    total = "TOTAL: (" + str(counter) + " items)" 
+    final_total = 348.5
+    sum = "SUM: Rs. " + str(final_total)
+
+
+
+    invoice_rows = [[invoice_no, '', 'MULTILINGUAL VOICE ASSISTANT', '' , inv_date], ['S. NO.', 'ITEM NAME', 'RATE','QUANTITY','PRICE']]
+
+    # We'll generate serial numbers and the rows of the invoice here.
+    for serial_number in range(len(entity_name)):
+        invoice_rows.append([str(counter + 1),str(entity_name[counter]),str(price[counter]),str(quantity[counter]),str(quantity[counter] * price[counter]) ])
+        #print(str(counter + 1) + ". " +str(entity_name[counter]) + "    " + str(quantity[counter]) +  " " +str(price[counter]) + " " + str(quantity[counter] * price[counter]))
+        counter = counter + 1
+
+    invoice_rows.append([total,'','','', sum])
+
+    t.add_rows(
+        invoice_rows
+        )
+
+    print(t.draw())
+
+
+
 def print_voice_command():
     commands = ["सूजी दो किलो","आटा आधा किलो","कोलगेट टूथपेस्ट एक पैकेट","दैट ऑल लिक्विड तीन पैकेट","हार्पिक लेवेंडर दस पीस"] 
 
@@ -284,15 +317,16 @@ def main():
 
     n = sys.argv[1]
 
-    commands = vi.get_voice_input(int(n))
-    #commands = ["सूजी दो किलो","आटा आधा किलो","एक्लेयर्स तीन पैकेट"]
+    #commands = vi.get_voice_input(int(n))
+    commands = ["सूजी दो किलो","आटा आधा किलो","एक्लेयर्स तीन पैकेट"]
     quantity, price, entity_name = assign_quantaties(commands,quantity_no_mapping_dic)
     final_total, np_cost  = compute_final_price(entity_name, quantity, price)
 
-    print_voice_command()
+    #print_voice_command()
+    #dummy_pretty_invoice_print(entity_name, quantity, price, np_cost, final_total)
     pretty_invoice_print(entity_name, quantity, price, np_cost, final_total)
 
-    print_invoice(entity_name, quantity, price, np_cost, final_total)
+    #print_invoice(entity_name, quantity, price, np_cost, final_total)
 
 
 
