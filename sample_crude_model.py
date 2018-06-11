@@ -329,5 +329,5 @@ def main():
     #print_invoice(entity_name, quantity, price, np_cost, final_total)
 
 
-
-main()
+if __name__ == '__main__':
+    main()
