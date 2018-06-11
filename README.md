@@ -14,8 +14,8 @@ pip3 install numpy
 Example: आटा आधा किलो
 ```
 
-#### 1.3. Format Support 
-##### 1. Standard Dot Matrix
+#### 1.3. Print Support 
+##### 1. Standard Dot Matrix Format
  - A custom printable format traditionally used in Indian shops. 
  
 <!---
