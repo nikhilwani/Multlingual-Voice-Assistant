@@ -8,6 +8,8 @@ pip3 install numpy
 
 #### 1.2. Voice Activation Commands
 - Hindi
+- Marathi
+- English
 
 ```
 <trigger-word> <adjunct-words> <quantity-word> <quantity-type-word>
