@@ -19,7 +19,7 @@ Example: आटा आधा किलो
 - English
 ```
 
-#### 1.3. Print Support 
+#### 1.4. Print Support 
 ##### 1. Standard Dot Matrix Format
  - A custom printable format traditionally used in Indian shops. 
  
