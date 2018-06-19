@@ -6,14 +6,17 @@ pip3 install texttable
 pip3 install numpy
 ```
 
-#### 1.2. Voice Activation Commands
-- Hindi
-- Marathi
-- English
-
+#### 1.2. Voice Activation Command Format
 ```
 <trigger-word> <adjunct-words> <quantity-word> <quantity-type-word>
 Example: आटा आधा किलो
+```
+
+#### 1.3. Languages Supported
+```
+- Hindi
+- Marathi
+- English
 ```
 
 #### 1.3. Print Support 
