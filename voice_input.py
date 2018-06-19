@@ -27,7 +27,7 @@ def get_voice_input(n):
                                 chunk_size = chunk_size) as source:
             
             r.adjust_for_ambient_noise(source)
-            print("Say Something")
+            print("Say Something:")
             audio = r.listen(source)
 
         filename = "microphone-results" + str(each_command) + ".wav"
