@@ -5,6 +5,12 @@
 pip3 install texttable
 pip3 install numpy
 ```
+OR
+
+```
+pip3 install -r requirements.txt
+```
+
 
 #### 1.2. Voice Activation Command Format
 ```
